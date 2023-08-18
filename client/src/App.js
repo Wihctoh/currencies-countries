@@ -25,7 +25,7 @@ function App() {
       const response = await axios.get(`https://api.nbrb.by/exrates/rates/${age}?parammode=2`);
       setData1(response.data);
     } catch (error) {
-      alert("Course unavailable, please select another currencies!");
+      alert("Курс данной валюты недоступен, попробуйте позже!");
     }
   }
 
@@ -52,8 +52,8 @@ function App() {
         </Select>
       </FormControl>
       <Typography variant="h5">Текущий курс: {data1.Cur_OfficialRate} </Typography>
-      <Button onClick={request1} variant="contained" style={{ width: 150 }}>
-        get course
+      <Button onClick={request1} variant="contained" style={{ width: 170 }}>
+        получить курс
       </Button>
     </div>
   );

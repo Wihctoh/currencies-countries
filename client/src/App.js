@@ -4,15 +4,15 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import axios from "axios";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 function App() {
-  const [age, setAge] = useState("");
+  const [value, setValue] = useState("");
   const [data, setData] = useState([]);
-  const [data1, setData1] = useState([]);
+  const [dataCur, setDataCur] = useState([]);
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setValue(event.target.value);
   };
 
   async function request() {
@@ -20,10 +20,10 @@ function App() {
     setData(response.data);
   }
 
-  async function request1() {
+  async function requestCurrValue() {
     try {
-      const response = await axios.get(`https://api.nbrb.by/exrates/rates/${age}?parammode=2`);
-      setData1(response.data);
+      const response = await axios.get(`https://api.nbrb.by/exrates/rates/${value}?parammode=2`);
+      setDataCur(response.data);
     } catch (error) {
       alert("Курс данной валюты недоступен, попробуйте позже!");
     }
@@ -33,15 +33,19 @@ function App() {
     request();
   }, []);
 
+  useEffect(() => {
+    requestCurrValue();
+  }, [value]);
+
   return (
     <div className="App" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       <FormControl style={{ width: 400 }}>
-        <InputLabel id="test">Select Occupation</InputLabel>
+        <InputLabel id="test">Select Currency</InputLabel>
         <Select
-          labelId="test"
-          id="test"
-          value={age}
-          label="Select Occupation"
+          labelId="Currency"
+          id="Currency"
+          value={value}
+          label="Select Currency"
           onChange={handleChange}
         >
           {data.map((el, index) => (
@@ -51,10 +55,7 @@ function App() {
           ))}
         </Select>
       </FormControl>
-      <Typography variant="h5">Текущий курс: {data1.Cur_OfficialRate} </Typography>
-      <Button onClick={request1} variant="contained" style={{ width: 170 }}>
-        получить курс
-      </Button>
+      <Typography variant="h5">Текущий курс: {dataCur.Cur_OfficialRate} </Typography>
     </div>
   );
 }
